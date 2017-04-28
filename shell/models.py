@@ -3,9 +3,9 @@ from sqlalchemy import Column, Enum, ForeignKey, Integer, String, Text, text,cre
 from sqlalchemy.orm import relationship,scoped_session,sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
-from flask import Flask
+from flask import Flask,g
 
-engine = create_engine('mysql+pymysql://root:root@localhost:3306/conch',encoding='utf-8')
+engine = create_engine('mysql+pymysql://root:root@localhost:3306/conch?charset=utf8')
 db_session = scoped_session(sessionmaker(autocommit=False,
                                      autoflush=False,
                                      bind=engine))
@@ -64,6 +64,14 @@ class Song(Base):
     singer = Column(String(45), nullable=False)
     url = Column(String(100))
 
+    def to_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'singer_name':self.singer,
+            'url':self.url
+        }
+
 
 class Tag(Base):
     __tablename__ = 'tag'
@@ -81,6 +89,14 @@ class User(Base):
     email = Column(String(45), nullable=False)
     compaint = Column(Integer, nullable=False, server_default=text("'0'"))
 
+    def to_json(self):
+        return {
+            'id':self.id,
+            'name':self.name,
+            'email':self.email,
+            'complaint':self.compaint
+        }
+
     def generate_auth_token(self,expiration = 600):
         s = Serializer('SECRET_KEY', expires_in = expiration)
         return s.dumps({'id':self.id})
@@ -91,7 +107,6 @@ class User(Base):
         s = Serializer('SECRET_KEY')
         try:
             data = s.loads(token)
-            print "succ"
         except SignatureExpired:
             print 'signature expired'
             return None
@@ -99,7 +114,6 @@ class User(Base):
             print 'bad signature'
             return  None
         user = User.query.get(data['id'])
-        print 'id',data['id']
         return user
 
     def verity_password(self,password):
