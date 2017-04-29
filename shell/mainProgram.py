@@ -1,14 +1,10 @@
 # encoding: utf-8
 
-from sqlalchemy import Column, String, create_engine
 from sqlalchemy import func
 from sqlalchemy.exc import StatementError, IntegrityError
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
 from flask import Flask, request, jsonify, g, make_response
 from flask_restful import Api, Resource, abort, url_for
 from flask_httpauth import HTTPBasicAuth
-from sqlalchemy.orm import scoped_session
 from models import User, UserRole, db_session, Shell, Song, ShellTag, Notice, Tag, UserShellRelationship, Follow
 import common
 from random import choice
@@ -19,34 +15,11 @@ api = Api(app)
 auth = HTTPBasicAuth()
 
 
-# @app.before_request
-# def init_session():
-#     g.session = db_session()
-#
-#
-# @app.teardown_request
-# def close_session(exception):
-#     try:
-#         g.session.commit()
-#     except:
-#         print "oops!"
-#         g.session.rollback()
-#     finally:
-#         print "aha close!"
-#         g.session.close()
-
 def generate_return_info(code, message):
     return {
         "code": code,
         "message": message
     }
-
-
-# @auth.login_required
-# def get_auth_token():
-#     print "get auth token"
-#     token = g.user.generate_auth_token().decode('ascii')
-#     return token
 
 
 @auth.verify_password
@@ -65,8 +38,8 @@ def verify_password(email_or_token, password):
 def unauthorized():
     return make_response(jsonify({
         "info": {
-            'code':0,
-            'message': '未登录'}}), 401)
+            'code': 0,
+            'message': '登录失败'}}), 401)
 
 
 # 注册
@@ -75,20 +48,29 @@ def new_user():
     username = request.json.get('name')
     pwd = request.json.get('password')
     email = request.json.get('email')
-    print username, pwd, email
+    code = 1
+    message = "注册成功"
+    user = None
     if username is None or pwd is None or email is None:
-        abort(400)
-    if User.query.filter_by(email=email).first() is not None:
-        print "existed user"
-        abort(400)
-    common.send_mail(email)
-    user = User(name=username, password=pwd, email=email)
-    session = db_session()
-    session.add(user)
-    session.commit()
-    session.close()
-    user = session.merge(user)
-    return jsonify(user.to_json())
+        code=0
+        message = "用户名/密码不能为空"
+    elif User.query.filter_by(email=email).first() is not None:
+        code=0
+        message = "用户已存在！"
+    else:
+        common.send_mail(email, "您已成功注册海螺！")
+        user = User(name=username, password=pwd, email=email)
+        session = db_session()
+        session.add(user)
+        session.commit()
+        session.close()
+        user = session.merge(user)
+        user = user.to_json()
+    return jsonify({
+        "user":user,
+        "info":generate_return_info(code,message)
+    })
+
 
 
 # 登录
@@ -101,7 +83,7 @@ def login():
     code = 1
     message = "登录成功"
     if type(token) != unicode:
-        token = ""
+        token = None
         code = 0
         message = "登录失败"
     return jsonify({
@@ -129,14 +111,16 @@ def get_song():
 @auth.login_required
 def new_song():
     name = request.json.get('name')
-    singer = request.json.get('singer')
+    singer = request.json.get('singer_name')
     url = request.json.get('url')
     print name, singer, url
     song = Song(name=name, singer=singer, url=url)
     session = db_session()
     session.add(song)
-    session.commit()
-    session.close()
+    try:
+        session.commit()
+    finally:
+        session.close()
     song = session.merge(song)
     return jsonify(song.to_json())
 
@@ -157,14 +141,16 @@ def new_shell():
     session.close()
     return jsonify(shell.to_json())
 
+
 # 搜索标签
 @app.route('/tag')
 def find_tag():
     tag_name = request.args.get("tag_name")
     session = db_session()
-    tags = [tag.to_json() for tag in session.query(Tag).filter(Tag.content.like(tag_name+'%'))]
+    tags = [tag.to_json() for tag in session.query(Tag).filter(Tag.content.like(tag_name + '%'))]
     session.close()
     return jsonify(tags)
+
 
 # 添加标签，覆盖添加
 @app.route('/shell/tag', methods=['POST'])
@@ -186,7 +172,7 @@ def add_tag():
         "info": info})
 
 
-# 根据歌曲/tag查看海螺，未完成
+# 根据歌曲/tag查看海螺
 @app.route('/shell', methods=['GET'])
 def all_shell():
     type = request.args.get("type")
@@ -197,20 +183,29 @@ def all_shell():
     # tags = [session.queiry(ShellTag).filter(ShellTag.tag_id == tag_id) for tag_id in
     #     session.query(Tag).filter(tag==None or Tag.content==tag).all()]
     shells_result = []
-    for song in songs:
-        shells_tmp = session.query(Shell).filter(Shell.song_id == song.id).all()
-        for shell in shells_tmp:
-            shells_result.append(shell)
+    if song_name is not None:
+        for song in songs:
+            shells_tmp = session.query(Shell).filter(Shell.song_id == song.id).all()
+            for shell in shells_tmp:
+                shells_result.append(shell)
+    if tag is not None:
+        tag_id = session.query(Tag.id).filter(Tag.content==tag).order_by(func.random()).limit(1).scalar()
+        print tag_id
+        if tag_id is not None:
+            shell_tags = session.query(ShellTag).filter(ShellTag.tag_id == tag_id).order_by(func.random()).limit(
+                5).all()
+            for shell_tag in shell_tags:
+                shells_result.append(session.query(Shell).filter(Shell.id == shell_tag.shell_id).first())
     shells = []
     if type == "all":
         shells = [shell.to_json() for shell in shells_result]
     elif type == "random":
-        shells = choice(shells_result).to_json()
+        shells = choice(shells_result).to_json() if len(shells_result) > 0 else []
     session.close()
     return jsonify(shells)
 
 
-# 喜欢
+# 喜欢/收藏
 @app.route('/shell/like_collect', methods=['POST'])
 @auth.login_required
 def like_shell():
@@ -286,8 +281,8 @@ def follow_user(id):
         session.commit()
     except IntegrityError:
         print "error"
-        code=0
-        message="用户不存在"
+        code = 0
+        message = "用户不存在"
         session.rollback()
     finally:
         session.close()
@@ -311,35 +306,59 @@ def get_notice():
         session.close()
     return jsonify(notices)
 
-#个人主页
-@app.route('/user',methods=['GET'])
+
+# 修改个人信息
+@app.route('/user', methods=['PATCH'])
+@auth.login_required
+def edit_profile():
+    name = request.json.get("name")
+    password = request.json.get("password")
+    user = g.user
+    user.name = name
+    user.password = password
+    session = db_session()
+    session.add(user)
+    try:
+        session.commit()
+    finally:
+        session.close()
+    common.send_mail(g.user.email, "您已成功修改个人信息:)")
+    return jsonify({
+        "user": user.to_json(),
+        "info": generate_return_info(1, "操作成功")
+    })
+
+
+# 个人主页
+@app.route('/user', methods=['GET'])
 @auth.login_required
 def user_page():
     user_id = g.user.id
     user_name = g.user.name
     session = db_session
-    shell_num = session.query(func.count(Shell.id)).filter(Shell.user_id==user_id).scalar()
-    shells = [shell.to_json() for shell in session.query(Shell).filter(Shell.user_id==user_id)]
+    shell_num = session.query(func.count(Shell.id)).filter(Shell.user_id == user_id).scalar()
+    shells = [shell.to_json() for shell in session.query(Shell).filter(Shell.user_id == user_id)]
     follower_num = session.query(func.count(Follow.id)).filter(Follow.follow_id == user_id).scalar()
     follow_num = session.query(func.count(Follow.id)).filter(Follow.follower_id == user_id).scalar()
     session.close()
     return jsonify({
-        "user":{
-            "name":user_name,
+        "user": {
+            "name": user_name,
             "shell_num": shell_num,
-            "follow_num":follow_num,
-            "fan_num":follower_num
+            "follow_num": follow_num,
+            "fan_num": follower_num
         },
-        "shell":shells
+        "shell": shells
     })
 
-#查看他人主页
-@app.route('/user/<int:id>',methods=['GET'])
+
+# 查看他人主页
+@app.route('/user/<int:id>', methods=['GET'])
 def others_page(id):
     session = db_session()
-    user_name = session.query(User.name).filter(User.id==id).scalar()
-    shell_num = session.query(func.count(Shell.id)).filter(Shell.user_id == id,Shell.type==1).scalar()
-    shells = [shell.to_json() for shell in session.query(Shell).filter(Shell.user_id == id,Shell.type==1)]
+    user_name = session.query(User.name).filter(User.id == id).scalar()
+    shell_num = session.query(func.count(Shell.id)).filter(Shell.user_id == id, Shell.type == 1).scalar()
+    shells = [shell.to_json() for shell in session.query(Shell).filter(Shell.user_id == id, Shell.type == 1)]
     follower_num = session.query(func.count(Follow.id)).filter(Follow.follow_id == id).scalar()
     follow_num = session.query(func.count(Follow.id)).filter(Follow.follower_id == id).scalar()
     session.close()
@@ -353,6 +372,7 @@ def others_page(id):
         "shell": shells
     })
 
+
 # 查看海螺详细信息
 @app.route('/shell/<int:id>', methods=['GET'])
 def view_shell(id):
@@ -361,7 +381,7 @@ def view_shell(id):
     code = 1
     message = u"操作成功"
     if shell is None:
-        shell = ""
+        shell = None
         code = 0
         message = u"不存在的海螺！"
     else:
@@ -370,6 +390,34 @@ def view_shell(id):
         "shell": shell,
         "info": generate_return_info(code, message)
     })
+
+
+# 关注列表
+@app.route('/user/follow', methods=['GET'])
+@auth.login_required
+def follow():
+    user_id = g.user.id
+    session = db_session()
+    follow_ids = session.query(Follow.follow_id).filter(Follow.follower_id == user_id).all()
+    follows = []
+    for follow_id in follow_ids:
+        follows.append(session.query(User).filter(User.id == follow_id[0]).first().to_json())
+    session.close()
+    return jsonify(follows)
+
+
+# 粉丝列表
+@app.route('/user/fans', methods=['GET'])
+@auth.login_required
+def follower():
+    user_id = g.user.id
+    session = db_session()
+    follower_ids = session.query(Follow.follower_id).filter(Follow.follow_id == user_id).all()
+    followers = []
+    for follower_id in follower_ids:
+        followers.append(session.query(User).filter(User.id == follower_id[0]).first().to_json())
+    session.close()
+    return jsonify(followers)
 
 
 # 查看我的喜欢/收藏列表
