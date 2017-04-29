@@ -169,7 +169,7 @@ def all_shell():
     return jsonify(shells)
 
 
-# 喜欢
+# 喜欢,，未完成
 @app.route('/shell/like', methods=['POST'])
 @auth.login_required
 def like_shell():
@@ -204,7 +204,7 @@ def comlain_user(id):
     return jsonify(user.to_json())
 
 #关注海螺作者
-@app.route('/user/id/follow')
+# @app.route('/user/id/follow')
 
 
 # 查看我的收藏列表
