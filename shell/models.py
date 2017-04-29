@@ -1,18 +1,20 @@
 # coding: utf-8
-from sqlalchemy import Column, Enum, ForeignKey, Integer, String, Text, text,create_engine
-from sqlalchemy.orm import relationship,scoped_session,sessionmaker
+from sqlalchemy import Column, Enum, ForeignKey, Integer, String, Text, text, create_engine
+from sqlalchemy.orm import relationship, scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
-from flask import Flask,g
+from flask import Flask, g
 
 engine = create_engine('mysql+pymysql://root:root@localhost:3306/conch?charset=utf8')
 db_session = scoped_session(sessionmaker(autocommit=False,
-                                     autoflush=False,
-                                     bind=engine))
+                                         autoflush=False,
+                                         bind=engine,
+                                         expire_on_commit=False))
 app = Flask(__name__)
 Base = declarative_base()
 Base.query = db_session.query_property()
 metadata = Base.metadata
+
 
 class Notice(Base):
     __tablename__ = 'notice'
@@ -44,6 +46,27 @@ class Shell(Base):
     song = relationship(u'Song')
     user = relationship(u'User')
 
+    def to_json(self):
+        session = db_session()
+        song = session.query(Song).filter(Song.id == self.song_id).first()
+        user = session.query(User).filter(User.id == self.user_id).first()
+        tags_result = [session.query(Tag.content).filter(Tag.id == tag_id[0]).first() for tag_id in
+                       session.query(ShellTag.tag_id).filter(ShellTag.shell_id == self.id).all()]
+        tags = []
+        for tag in tags_result:
+            tags.append(tag[0])
+        session.close()
+        return {
+            "id": self.id,
+            "user_name": user.name,
+            "song_id": song.id,
+            "song_name": song.name,
+            "singer_name": song.singer,
+            "url": song.url,
+            "content": self.content,
+            "tag": tags
+        }
+
 
 class ShellTag(Base):
     __tablename__ = 'shell_tag'
@@ -68,8 +91,8 @@ class Song(Base):
         return {
             'id': self.id,
             'name': self.name,
-            'singer_name':self.singer,
-            'url':self.url
+            'singer_name': self.singer,
+            'url': self.url
         }
 
 
@@ -91,15 +114,15 @@ class User(Base):
 
     def to_json(self):
         return {
-            'id':self.id,
-            'name':self.name,
-            'email':self.email,
-            'complaint':self.compaint
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+            'complaint': self.compaint
         }
 
-    def generate_auth_token(self,expiration = 600):
-        s = Serializer('SECRET_KEY', expires_in = expiration)
-        return s.dumps({'id':self.id})
+    def generate_auth_token(self, expiration=600):
+        s = Serializer('SECRET_KEY', expires_in=expiration)
+        return s.dumps({'id': self.id})
 
     @staticmethod
     def verify_auth_token(token):
@@ -112,12 +135,13 @@ class User(Base):
             return None
         except BadSignature:
             print 'bad signature'
-            return  None
+            return None
         user = User.query.get(data['id'])
         return user
 
-    def verity_password(self,password):
-        return password==self.password
+    def verity_password(self, password):
+        return password == self.password
+
 
 class UserRole(Base):
     __tablename__ = 'user_role'

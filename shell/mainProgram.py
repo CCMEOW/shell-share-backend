@@ -5,12 +5,13 @@ from sqlalchemy import Enum
 from sqlalchemy.exc import StatementError
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from flask import Flask, request, jsonify, g
+from flask import Flask, request, jsonify, g, wrappers
 from flask_restful import Api, Resource, abort, url_for
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy.orm import scoped_session
-from models import User, UserRole, db_session, Shell, Song, ShellTag, Notice
+from models import User, UserRole, db_session, Shell, Song, ShellTag, Notice, Tag
 import common
+from random import choice
 
 app = Flask(__name__)
 api = Api(app)
@@ -34,6 +35,12 @@ auth = HTTPBasicAuth()
 #         print "aha close!"
 #         g.session.close()
 
+def generate_return_info(code, message):
+    return {
+        "code": code,
+        "message": message
+    }
+
 
 @auth.login_required
 def get_auth_token():
@@ -50,10 +57,8 @@ def verify_password(email_or_token, password):
     if not user:
         user = User.query.filter_by(email=email_or_token).first()
         if not user or not user.verity_password(password):
-            print 'false'
             return False
     g.user = user
-    print 'true'
     return True
 
 
@@ -84,7 +89,17 @@ def new_user():
 def login():
     # email = request.json.get('email')
     # password = request.json.get('password')
-    return jsonify({'token': get_auth_token})
+    token = get_auth_token()
+    code = 1
+    message = "登录成功"
+    if type(token) != unicode:
+        token = ""
+        code = 0
+        message = "登录失败"
+    return jsonify({
+        'user': {'token': token},
+        'info': generate_return_info(code, message)
+    })
 
 
 # 获取歌曲
@@ -131,40 +146,48 @@ def new_shell():
     session.add(shell)
     session.commit()
     session.close()
-    shell = session.merge(shell)
-    song = session.merge(song)
-    return jsonify({
-        'id': shell.id,
-        'user_name': user_name,
-        'song_id': song_id,
-        "song_name": song.name,
-        'singer_name': song.singer,
-        'url': song.url,
-        'content': shell.content
-    })
+    return jsonify(shell.to_json())
 
 
-# 打标签
+# 添加标签
 @app.route('/shell/tag', methods=['POST'])
-def set_tag():
-    # shell_id=request.json.get("shell_id")
-    # tag_id=request.json.get("tag_id")
-    # session = db_session()
-    # shell_tag = ShellTag(shell_id=shell_id,tag_id=tag_id)
-    pass
+def add_tag():
+    shell_id = request.json.get("shell_id")
+    tag_ids = request.json.get("tag_id")
+    session = db_session()
+    session.query(ShellTag).filter(ShellTag.shell_id == shell_id).delete(synchronize_session=False)
+    for tag_id in tag_ids:
+        session.add(ShellTag(shell_id=shell_id, tag_id=tag_id))
+    shell = session.query(Shell).filter(Shell.id == shell_id).first()
+    try:
+        session.commit()
+    finally:
+        session.close()
+    info = generate_return_info(1, "操作成功")
+    return jsonify({
+        "shell": shell.to_json(),
+        "info": info})
 
 
 # 根据歌曲/tag查看海螺，未完成
 @app.route('/shell', methods=['GET'])
 def all_shell():
-    type = request.json.get("type")
-    song_name = request.json.get("song_name")
-    tag = request.json.get("tag")
+    type = request.args.get("type")
+    song_name = request.args.get("song_name")
+    tag = request.args.get("tag")
     session = db_session()
     songs = session.query(Song).filter(Song.name == song_name).all()
+    # if type == "all":
+    shells_result = []
+    for song in songs:
+        shells_tmp = session.query(Shell).filter(Shell.song_id == song.id).all()
+        for shell in shells_tmp:
+            shells_result.append(shell)
+    shells = []
     if type == "all":
-        shells = [session.query(Shell).filter(Shell.song_id == song.id).all() for song in songs]
-    shells = [shell.to_json() for shell in session.query(Song).all()]
+        shells = [shell.to_json() for shell in shells_result]
+    elif type == "random":
+        shells = choice(shells_result).to_json()
     session.close()
     return jsonify(shells)
 
@@ -196,14 +219,15 @@ def comlain_user(id):
     session = db_session
     try:
         user = session.query(User).filter(User.id == id).first()
-        user.compaint+=1
+        user.compaint += 1
         session.commit()
     finally:
         session.close()
     user = session.merge(user)
     return jsonify(user.to_json())
 
-#关注海螺作者
+
+# 关注海螺作者
 # @app.route('/user/id/follow')
 
 
@@ -217,6 +241,23 @@ def my_collection():
 @app.route('/like', methods=['GET'])
 def my_like():
     pass
+
+
+# 测试程序
+@app.route('/test/<int:id>', methods=['GET'])
+def test(id):
+    session = db_session()
+    # tags = [tag.content for tag in [session.query(Tag).filter(Tag.id == tag_id).all() for tag_id in
+    #         session.query(ShellTag).filter(ShellTag.shell_id == id).all()]]
+    # tag_ids = session.query(ShellTag.tag_id).filter(ShellTag.shell_id == id).all()
+    tags_result = [session.query(Tag.content).filter(Tag.id == tag_id[0]).first() for tag_id in
+                   session.query(ShellTag.tag_id).filter(ShellTag.shell_id == id).all()]
+    session.close()
+    tags = []
+    for tag in tags_result:
+        tags.append(tag[0])
+    print tags
+    return jsonify({"tags": tags})
 
 
 if __name__ == '__main__':
