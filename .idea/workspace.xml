@@ -16,7 +16,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/flask projects$mainProgram.coverage" NAME="mainProgram Coverage Results" MODIFIED="1492886888122" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/mainFolder" />
     <SUITE FILE_PATH="coverage/flask projects$mainProgram__1_.coverage" NAME="mainProgram (1) Coverage Results" MODIFIED="1493127716965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shell" />
-    <SUITE FILE_PATH="coverage/shell-share-backend$mainProgram__1_.coverage" NAME="mainProgram (1) Coverage Results" MODIFIED="1493453193002" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shell" />
+    <SUITE FILE_PATH="coverage/shell-share-backend$mainProgram__1_.coverage" NAME="mainProgram (1) Coverage Results" MODIFIED="1493486988123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/shell" />
     <SUITE FILE_PATH="coverage/flask projects$restfulTest__1_.coverage" NAME="restfulTest (1) Coverage Results" MODIFIED="1490236334504" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/flask projects$quickstart.coverage" NAME="quickstart Coverage Results" MODIFIED="1490236348864" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/flask projects$restfulTest.coverage" NAME="restfulTest Coverage Results" MODIFIED="1490236392156" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/mainFolder" />
@@ -33,18 +33,39 @@
       <file leaf-file-name="mainProgram.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/shell/mainProgram.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="104" column="6" lean-forward="true" selection-start-line="104" selection-start-column="6" selection-end-line="104" selection-end-column="6" />
+            <state relative-caret-position="512">
+              <caret line="353" column="6" lean-forward="true" selection-start-line="353" selection-start-column="6" selection-end-line="353" selection-end-column="6" />
               <folding>
                 <element signature="e#19#71#0" expanded="true" />
-                <element signature="e#1640#2211#0" expanded="false" />
-                <element signature="e#2674#3019#0" expanded="false" />
-                <element signature="e#3108#3448#0" expanded="false" />
-                <element signature="e#3539#3908#0" expanded="false" />
-                <element signature="e#3980#4540#0" expanded="false" />
-                <marker date="1493453603911" expanded="false" signature="5370:5855" ph="..." />
-                <marker date="1493453603911" expanded="false" signature="5941:6195" ph="..." />
+                <element signature="e#1032#1095#0" expanded="false" />
+                <element signature="e#1327#1601#0" expanded="false" />
+                <element signature="e#1648#1756#0" expanded="false" />
+                <element signature="e#1822#2393#0" expanded="false" />
+                <element signature="e#2477#2855#0" expanded="false" />
+                <element signature="e#2922#3267#0" expanded="false" />
+                <element signature="e#3356#3696#0" expanded="false" />
+                <element signature="e#4244#4451#0" expanded="false" />
+                <element signature="e#4527#5087#0" expanded="false" />
+                <element signature="e#5168#5980#0" expanded="false" />
+                <element signature="e#6083#7748#0" expanded="false" />
+                <element signature="e#7839#8088#0" expanded="false" />
+                <element signature="e#8199#8797#0" expanded="false" />
+                <element signature="e#8889#9334#0" expanded="false" />
+                <element signature="e#10199#10935#0" expanded="false" />
+                <element signature="e#11019#11373#0" expanded="false" />
+                <element signature="e#11481#11989#0" expanded="false" />
+                <element signature="e#12063#12675#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="query.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/orm/query.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="234">
+              <caret line="2822" column="8" lean-forward="false" selection-start-line="2822" selection-start-column="8" selection-end-line="2822" selection-end-column="8" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -52,9 +73,14 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/shell/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="55" column="30" lean-forward="false" selection-start-line="55" selection-start-column="19" selection-end-line="55" selection-end-column="30" />
-              <folding />
+            <state relative-caret-position="370">
+              <caret line="63" column="9" lean-forward="false" selection-start-line="63" selection-start-column="9" selection-end-line="63" selection-end-column="9" />
+              <folding>
+                <element signature="e#3400#3684#0" expanded="false" />
+                <element signature="e#3709#4076#0" expanded="false" />
+                <element signature="e#4350#5465#0" expanded="false" />
+                <element signature="e#5494#5746#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -63,7 +89,7 @@
         <entry file="file://$PROJECT_DIR$/shell/restfulTest.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="396">
-              <caret line="12" column="27" lean-forward="true" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+              <caret line="12" column="27" lean-forward="false" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -89,6 +115,18 @@
       <find>g</find>
       <find>.all</find>
       <find>response</find>
+      <find>verify_auth_token</find>
+      <find>None</find>
+      <find>delete</find>
+      <find>enum</find>
+      <find>[0]</find>
+      <find>shell</find>
+      <find>/shell</find>
+      <find>to_json</find>
+      <find>except</find>
+      <find>code</find>
+      <find>/tag</find>
+      <find>like</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -118,10 +156,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="937" />
-    <option name="y" value="129" />
-    <option name="width" value="1768" />
-    <option name="height" value="1454" />
+    <option name="x" value="915" />
+    <option name="width" value="1868" />
+    <option name="height" value="1451" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -138,7 +175,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -168,6 +204,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -522,7 +559,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="937" y="129" width="1768" height="1454" extended-state="0" />
+    <frame x="915" y="0" width="1868" height="1451" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -531,11 +568,11 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44665012" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34837094" sideWeight="0.49094203" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46733668" sideWeight="0.49094203" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43492863" sideWeight="0.49423558" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1336675" sideWeight="0.49423558" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39933166" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17376775" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -573,20 +610,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/werkzeug/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1764">
-          <caret line="52" column="16" lean-forward="false" selection-start-line="52" selection-start-column="16" selection-end-line="52" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mainFolder/quickstart.py" />
-    <entry file="file://$PROJECT_DIR$/mainFolder/test.py" />
     <entry file="file://$PROJECT_DIR$/shell/restfulTest.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
@@ -818,14 +846,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="232">
           <caret line="353" column="6" lean-forward="false" selection-start-line="353" selection-start-column="6" selection-end-line="353" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/shell/restfulTest.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
-          <caret line="12" column="27" lean-forward="true" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+          <caret line="12" column="27" lean-forward="false" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
           <folding />
         </state>
       </provider>
@@ -834,14 +861,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="237">
           <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shell/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="55" column="30" lean-forward="false" selection-start-line="55" selection-start-column="19" selection-end-line="55" selection-end-column="30" />
           <folding />
         </state>
       </provider>
@@ -862,19 +881,66 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="973" column="0" lean-forward="false" selection-start-line="973" selection-start-column="0" selection-end-line="973" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_tmp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shell/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="63" column="9" lean-forward="false" selection-start-line="63" selection-start-column="9" selection-end-line="63" selection-end-column="9" />
+          <folding>
+            <element signature="e#3400#3684#0" expanded="false" />
+            <element signature="e#3709#4076#0" expanded="false" />
+            <element signature="e#4350#5465#0" expanded="false" />
+            <element signature="e#5494#5746#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/sqlalchemy/orm/query.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="2822" column="8" lean-forward="false" selection-start-line="2822" selection-start-column="8" selection-end-line="2822" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/shell/mainProgram.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="104" column="6" lean-forward="true" selection-start-line="104" selection-start-column="6" selection-end-line="104" selection-end-column="6" />
+        <state relative-caret-position="512">
+          <caret line="353" column="6" lean-forward="true" selection-start-line="353" selection-start-column="6" selection-end-line="353" selection-end-column="6" />
           <folding>
             <element signature="e#19#71#0" expanded="true" />
-            <element signature="e#1640#2211#0" expanded="false" />
-            <element signature="e#2674#3019#0" expanded="false" />
-            <element signature="e#3108#3448#0" expanded="false" />
-            <element signature="e#3539#3908#0" expanded="false" />
-            <element signature="e#3980#4540#0" expanded="false" />
-            <marker date="1493453603911" expanded="false" signature="5370:5855" ph="..." />
-            <marker date="1493453603911" expanded="false" signature="5941:6195" ph="..." />
+            <element signature="e#1032#1095#0" expanded="false" />
+            <element signature="e#1327#1601#0" expanded="false" />
+            <element signature="e#1648#1756#0" expanded="false" />
+            <element signature="e#1822#2393#0" expanded="false" />
+            <element signature="e#2477#2855#0" expanded="false" />
+            <element signature="e#2922#3267#0" expanded="false" />
+            <element signature="e#3356#3696#0" expanded="false" />
+            <element signature="e#4244#4451#0" expanded="false" />
+            <element signature="e#4527#5087#0" expanded="false" />
+            <element signature="e#5168#5980#0" expanded="false" />
+            <element signature="e#6083#7748#0" expanded="false" />
+            <element signature="e#7839#8088#0" expanded="false" />
+            <element signature="e#8199#8797#0" expanded="false" />
+            <element signature="e#8889#9334#0" expanded="false" />
+            <element signature="e#10199#10935#0" expanded="false" />
+            <element signature="e#11019#11373#0" expanded="false" />
+            <element signature="e#11481#11989#0" expanded="false" />
+            <element signature="e#12063#12675#0" expanded="false" />
           </folding>
         </state>
       </provider>

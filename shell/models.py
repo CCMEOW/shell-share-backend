@@ -15,6 +15,15 @@ Base = declarative_base()
 Base.query = db_session.query_property()
 metadata = Base.metadata
 
+class Follow(Base):
+    __tablename__ = 'follow'
+
+    id = Column(Integer, primary_key=True)
+    follow_id = Column(ForeignKey(u'user.id'), nullable=False, index=True)
+    follower_id = Column(ForeignKey(u'user.id'), nullable=False, index=True)
+
+    follow = relationship(u'User', primaryjoin='Follow.follow_id == User.id')
+    follower = relationship(u'User', primaryjoin='Follow.follower_id == User.id')
 
 class Notice(Base):
     __tablename__ = 'notice'
@@ -26,6 +35,16 @@ class Notice(Base):
 
     receiver = relationship(u'User', primaryjoin='Notice.receiver_id == User.id')
     sender = relationship(u'User', primaryjoin='Notice.sender_id == User.id')
+
+    def to_json(self):
+        session = db_session()
+        sender_name = session.query(User).filter(User.id == self.sender_id).first().name
+        session.close()
+        return {
+            "type":self.type,
+            "sender_id":self.sender_id,
+            "sender_name":sender_name
+        }
 
 
 class Role(Base):
@@ -42,6 +61,7 @@ class Shell(Base):
     user_id = Column(ForeignKey(u'user.id'), nullable=False, index=True)
     song_id = Column(ForeignKey(u'song.id'), nullable=False, index=True)
     content = Column(Text, nullable=False)
+    type = Column(Integer, nullable=False, server_default=text("'0'"))
 
     song = relationship(u'Song')
     user = relationship(u'User')
@@ -57,7 +77,7 @@ class Shell(Base):
             tags.append(tag[0])
         session.close()
         return {
-            "id": self.id,
+            "shell_id": self.id,
             "user_name": user.name,
             "song_id": song.id,
             "song_name": song.name,
@@ -102,6 +122,11 @@ class Tag(Base):
     id = Column(Integer, primary_key=True)
     content = Column(String(45), nullable=False)
 
+    def to_json(self):
+        return {
+            "id":self.id,
+            "content":self.content
+        }
 
 class User(Base):
     __tablename__ = 'user'
@@ -160,8 +185,9 @@ class UserShellRelationship(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(ForeignKey(u'user.id'), nullable=False, index=True)
     shell_id = Column(ForeignKey(u'shell.id'), nullable=False, index=True)
-    like = Column(Integer, nullable=False, server_default=text("'0'"))
-    collection = Column(Integer, nullable=False, server_default=text("'0'"))
+    # like = Column(Integer, nullable=False, server_default=text("'0'"))
+    # collection = Column(Integer, nullable=False, server_default=text("'0'"))
+    type = Column(Enum(u'like', u'collection', u'like_collection'), nullable=False)
 
     shell = relationship(u'Shell')
     user = relationship(u'User')
